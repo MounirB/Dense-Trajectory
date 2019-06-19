@@ -1,67 +1,34 @@
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-#include <ctype.h>
-#include <unistd.h>
+#include "opencv2/opencv.hpp" // opencv2 headers !
+using namespace cv;           // c++ namespaces !
 
-#include <algorithm>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <fstream>
 #include <iostream>
-#include <vector>
-#include <list>
-#include <string>
-
-IplImage* image = 0; 
-IplImage* prev_image = 0;
-CvCapture* capture = 0;
-
-int show = 1; 
+#include <stdio.h>
+using namespace std;
 
 int main( int argc, char** argv )
 {
 	int frameNum = 0;
 
+	VideoCapture capture;         // c++ classes !
+
 	char* video = argv[1];
-	capture = cvCreateFileCapture(video);
+	capture.open(video);
 
-	if( !capture ) { 
-		printf( "Could not initialize capturing..\n" );
-		return -1;
-	}
-	
-	if( show == 1 )
-		cvNamedWindow( "Video", 0 );
+    if (! capture.isOpened())     // you have to CHECK this !
+    {
+        cout << "could not open the VideoCapture !" << endl;
+        return -1;
+    }
 
-	while( true ) {
-		IplImage* frame = 0;
-		int i, j, c;
-
-		// get a new frame
-		frame = cvQueryFrame( capture );
-		if( !frame )
-			break;
-
-		if( !image ) {
-			image =  cvCreateImage( cvSize(frame->width,frame->height), 8, 3 );
-			image->origin = frame->origin;
-		}
-
-		cvCopy( frame, image, 0 );
-
-		if( show == 1 ) {
-			cvShowImage( "Video", image);
-			c = cvWaitKey(3);
-			if((char)c == 27) break;
-		}
-		
-		std::cerr << "The " << frameNum << "-th frame" << std::endl;
-		frameNum++;
-	}
-
-	if( show == 1 )
-		cvDestroyWindow("Video");
-
-	return 0;
+    while(true)
+    {
+        Mat frame;
+        bool ok = capture.read(frame);
+        if (! ok)             // also, mandatory CHECK !
+             break; 
+        imshow("ocv",frame);
+        int k = waitKey(10);
+        if (k==27) break;     // esc. pressed
+    }
+    return 0;
 }

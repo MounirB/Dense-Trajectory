@@ -3,11 +3,14 @@
 #include "Descriptors.h"
 #include "OpticalFlow.h"
 
+#include <stdio.h>
 #include <time.h>
+#include <iostream>
+
 
 using namespace cv;
 
-int show_track = 0; // set show_track = 1, if you want to visualize the trajectories
+int show_track = 1; // set show_track = 1, if you want to visualize the trajectories
 
 int main(int argc, char** argv)
 {
@@ -82,7 +85,7 @@ int main(int argc, char** argv)
 			xyScaleTracks.resize(scale_num);
 
 			frame.copyTo(image);
-			cvtColor(image, prev_grey, CV_BGR2GRAY);
+			cvtColor(image, prev_grey, COLOR_BGR2GRAY);
 
 			for(int iScale = 0; iScale < scale_num; iScale++) {
 				if(iScale == 0)
@@ -109,7 +112,7 @@ int main(int argc, char** argv)
 
 		init_counter++;
 		frame.copyTo(image);
-		cvtColor(image, grey, CV_BGR2GRAY);
+		cvtColor(image, grey, COLOR_BGR2GRAY);
 
 		// compute optical flow for all scales once
 		my::FarnebackPolyExpPyr(grey, poly_pyr, fscales, 7, 1.5);
@@ -226,7 +229,7 @@ int main(int argc, char** argv)
 
 		if( show_track == 1 ) {
 			imshow( "DenseTrack", image);
-			c = cvWaitKey(3);
+			c = waitKey(3);
 			if((char)c == 27) break;
 		}
 	}

@@ -8,7 +8,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <algorithm>
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <fstream>
@@ -43,10 +43,10 @@ const float max_var = 50;
 const float max_dis = 20;
 
 typedef struct {
-	int x;       // top left corner
-	int y;
-	int width;
-	int height;
+    int x;       // top left corner
+    int y;
+    int width;
+    int height;
 }RectInfo;
 
 typedef struct {
